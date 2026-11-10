@@ -129,7 +129,7 @@ function TicketColumn({
           ))
         ) : (
           <Card>
-            <EmptyState title="All caught up" description="New tickets will appear here automatically." />
+            <EmptyState title="All caught up" description="New ticket will appear here automatically." />
           </Card>
         )}
       </div>
