@@ -222,7 +222,7 @@ export function TablesPage() {
             description={
               canManage
                 ? "Add your dining tables to start taking orders."
-                : "Ask an owner or manager to set up the dining floor."
+                : "Ask your owner or manager to set up the dining floor."
             }
           />
         </Card>
