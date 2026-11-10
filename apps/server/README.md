@@ -57,6 +57,18 @@ same API URL and its origin must match `CLIENT_URL`.
 The first-time setup flow is exposed by the client. Use the `OWNER_SETUP_SECRET`
 from the server environment to create the initial owner account.
 
+## Deploy to Vercel
+
+Create a Vercel project for the API and set its **Root Directory** to
+`apps/server`. The included `vercel.json` installs development dependencies
+needed for the TypeScript build and runs the server build command. Configure the
+environment variables listed above in the Vercel project settings. Do not set
+`DEMO_ACCOUNTS_ENABLED=true` in production.
+
+The Express application is deployed as a Vercel Function. WebSocket connections
+are not supported by this serverless deployment; use a separate persistent
+server for features that require Socket.IO.
+
 ## Database
 
 Prisma uses `prisma/schema.prisma`; `DIRECT_URL` supplies the migration
