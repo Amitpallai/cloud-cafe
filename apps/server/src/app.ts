@@ -1,6 +1,6 @@
 import express, { type Express } from "express";
 import cors from "cors";
-import helmet from "helmet";
+import * as helmet from "helmet";
 import cookieParser from "cookie-parser";
 
 import { env } from "./config/env.js";
@@ -14,7 +14,7 @@ const app:Express = express();
 
 app.disable("x-powered-by");
 
-app.use(helmet());
+app.use(helmet.default());
 
 app.use(
   cors({
