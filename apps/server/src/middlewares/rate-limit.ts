@@ -1,9 +1,4 @@
-import { createRequire } from "node:module";
-import type { Options, RateLimitRequestHandler } from "express-rate-limit";
-
-const rateLimit = createRequire(import.meta.url)("express-rate-limit") as (
-  options: Partial<Options>,
-) => RateLimitRequestHandler;
+import { rateLimit } from "express-rate-limit";
 
 export const loginLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,

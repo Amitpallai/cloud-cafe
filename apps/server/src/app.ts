@@ -1,5 +1,5 @@
-import { createRequire } from "node:module";
-import express, { type Express, type RequestHandler } from "express";
+import express, { type Express } from "express";
+import helmet from "helmet";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 
@@ -10,8 +10,7 @@ import {
   notFoundHandler,
 } from "./middlewares/error-handler.js";
 
-const helmet = createRequire(import.meta.url)("helmet") as () => RequestHandler;
-const app:Express = express();
+const app: Express = express();
 
 app.disable("x-powered-by");
 
