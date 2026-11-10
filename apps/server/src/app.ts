@@ -1,5 +1,5 @@
 import express, { type Express } from "express";
-import helmet  from "helmet";
+import * as helmet from 'helmet';
 import cors from "cors";
 import cookieParser from "cookie-parser";
 
@@ -14,7 +14,7 @@ const app: Express = express();
 
 app.disable("x-powered-by");
 
-app.use(helmet());
+app.use((helmet as any)()); 
 
 app.use(
   cors({
