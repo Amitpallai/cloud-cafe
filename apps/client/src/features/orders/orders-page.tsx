@@ -204,7 +204,7 @@ export function OrdersPage() {
                       variant="outline"
                       render={<Link to={`/billing/${order.id}`} />}
                     >
-                      Bill <ArrowUpRight />
+                      Bills<ArrowUpRight />
                     </Button>
                   ) : null}
                 </div>
