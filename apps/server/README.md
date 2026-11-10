@@ -60,10 +60,12 @@ from the server environment to create the initial owner account.
 ## Deploy to Vercel
 
 Create a Vercel project for the API and set its **Root Directory** to
-`apps/server`. The included `vercel.json` installs development dependencies
-needed for the TypeScript build and runs the server build command. Configure the
-environment variables listed above in the Vercel project settings. Do not set
-`DEMO_ACCOUNTS_ENABLED=true` in production.
+`apps/server` if you are deploying only the API. If your project is configured to
+use the repository root instead, enable pnpm workspaces so the server package's
+dependencies are installed from the monorepo root. The included `vercel.json`
+installs development dependencies needed for the TypeScript build and runs the
+server build command. Configure the environment variables listed above in the
+Vercel project settings. Do not set `DEMO_ACCOUNTS_ENABLED=true` in production.
 
 The Express application is deployed as a Vercel Function. WebSocket connections
 are not supported by this serverless deployment; use a separate persistent
