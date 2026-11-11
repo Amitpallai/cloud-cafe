@@ -20,21 +20,25 @@ The server's `CLIENT_URL` must match the browser origin (the default is `http://
 
 ## Demo accounts
 
-Demo accounts are opt-in and intended only for a non-production database. Set
-`DEMO_ACCOUNTS_ENABLED=true` in the server environment, then run
-`pnpm --filter server demo:seed` from the repository root. The seed command
+Demo accounts are opt-in and intended only for databases containing demo data.
+For local setup, set `DEMO_ACCOUNTS_ENABLED=true` in the server environment and
+run `pnpm --filter server demo:seed` from the repository root. The seed command
 uses the shared password `CloudCafeDemo123!`, refuses to run in production, and
-does not change accounts that already exist.
-Complete the normal owner setup before seeding; the demo owner also counts as an
-owner for the one-time setup check.
-In a development client, the login page shows role shortcuts and **Login as
-guest demo**, which signs in directly as the seeded cashier demo account. This
-shortcut is rejected by the server in production.
+does not change accounts that already exist. Complete the normal owner setup
+before seeding; the demo owner also counts as an owner for the one-time setup
+check.
+The login page shows **Login as guest demo** in development. To show it on a
+Vercel client deployment, set `VITE_DEMO_LOGIN_ENABLED=true` in that project's
+environment and redeploy. Also set `DEMO_ACCOUNTS_ENABLED=true` in the API
+project and ensure its database has an active cashier account at
+`demo.cashier@cloudcafe.test`. Guest access can view and perform cashier
+operations, so use only a database containing demo data; never enable it on a
+database with real business or customer data.
 
-The shortcuts fill the demo account email; users can enter the shared password
-`CloudCafeDemo123!` to sign in. Accounts use `demo.<role>@cloudcafe.test` for
-owner, manager, cashier, kitchen, and waiter. Keep these accounts and public
-demo credentials out of production.
+The shared demo password is `CloudCafeDemo123!`. Accounts use
+`demo.<role>@cloudcafe.test` for owner, manager, cashier, kitchen, and waiter.
+Keep these accounts and public demo credentials out of databases with real
+business data.
 
 ## Client features
 

@@ -113,7 +113,8 @@ export function LoginPage() {
               {submitting ? "Signing in…" : "Sign in"}
               {!submitting ? <ArrowRight /> : null}
             </Button>
-            {import.meta.env.DEV ? (
+            {import.meta.env.DEV ||
+            import.meta.env.VITE_DEMO_LOGIN_ENABLED === "true" ? (
               <Button
                 type="button"
                 variant="outline"

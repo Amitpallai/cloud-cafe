@@ -36,10 +36,11 @@ Copy `apps/server/.env.example` to `apps/server/.env` and set the values:
 | `CLOUDINARY_API_KEY` | Cloudinary API key. |
 | `CLOUDINARY_API_SECRET` | Cloudinary API secret. |
 | `TAX_RATE_PERCENT` | Tax percentage used by the app; defaults to `0`. |
-| `DEMO_ACCOUNTS_ENABLED` | Set to `true` to enable local demo login and account seeding. Defaults to `false`. |
+| `DEMO_ACCOUNTS_ENABLED` | Set to `true` to enable guest demo login. Defaults to `false`; leave disabled unless this database contains demo data only. |
 
 Keep `.env` files and all real credentials out of source control. Use distinct,
-random authentication secrets and do not enable demo accounts in production.
+random authentication secrets. Guest demo login is a public cashier session;
+never enable it on a database with real business or customer data.
 
 ## Run locally
 
@@ -64,7 +65,9 @@ use the repository root instead, enable pnpm workspaces so the server package's
 dependencies are installed from the monorepo root. The included `vercel.json`
 installs development dependencies needed for the TypeScript build and runs the
 server build command. Configure the environment variables listed above in the
-Vercel project settings. Do not set `DEMO_ACCOUNTS_ENABLED=true` in production.
+Vercel project settings. Guest demo login can be enabled in production only when
+the database contains demo data only; the guest has cashier access and can view
+and perform cashier operations.
 
 The Express application is deployed as a Vercel Function. WebSocket connections
 are not supported by this serverless deployment; use a separate persistent
@@ -89,9 +92,9 @@ Use migrations for schema changes; do not edit generated Prisma files directly.
 
 ## Demo accounts
 
-Demo accounts are for local or other non-production environments only. Complete
-owner setup first, then set `DEMO_ACCOUNTS_ENABLED=true` in
-`apps/server/.env`. Run from the repository root:
+Demo accounts are for demo data only. For local setup, complete owner setup
+first, then set `DEMO_ACCOUNTS_ENABLED=true` in `apps/server/.env`. Run from the
+repository root:
 
 ```sh
 pnpm --filter server demo:seed
@@ -109,9 +112,11 @@ The seeder creates these accounts with the shared password
 | Waiter | `demo.waiter@cloudcafe.test` |
 
 The seeder refuses to run with `NODE_ENV=production` and does not overwrite
-existing accounts. The guest demo login endpoint uses the seeded cashier and is
-also disabled in production. This password is public and for demos only; never
-use demo accounts or passwords for real customer data.
+existing accounts. Guest login requires an active `CASHIER` account with the
+demo cashier email. On Vercel, enable `DEMO_ACCOUNTS_ENABLED=true` on the API
+only if its database contains demo data only; the fixed demo password is public,
+and guest users can view and perform cashier operations. Never enable guest
+login on a database containing real business or customer data.
 
 ## Scripts
 

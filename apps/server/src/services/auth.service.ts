@@ -139,7 +139,7 @@ export const authService = {
   },
 
   async loginAsDemo() {
-    if (env.NODE_ENV === "production" || !env.DEMO_ACCOUNTS_ENABLED) {
+    if (!env.DEMO_ACCOUNTS_ENABLED) {
       throw new AppError("Demo login is unavailable", 404);
     }
 
@@ -147,7 +147,7 @@ export const authService = {
       where: { email: "demo.cashier@cloudcafe.test" },
     });
 
-    if (!user || !user.isActive) {
+    if (!user || !user.isActive || user.role !== "CASHIER") {
       throw new AppError("Demo account is unavailable. Seed demo accounts first.", 503);
     }
 
