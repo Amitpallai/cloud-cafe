@@ -13,6 +13,7 @@ The client is a responsive React 19 + TypeScript single-page application built w
    ```
 
 3. Set `VITE_API_URL` in `.env` if the API is not at `http://localhost:5000/api`.
+  
 4. Open `http://localhost:5173`. On the first run, use **Create owner account** and provide the server's one-time `OWNER_SETUP_SECRET`.
 
 The server's `CLIENT_URL` must match the browser origin (the default is `http://localhost:5173`) to allow credentialed API requests.
@@ -20,9 +21,9 @@ The server's `CLIENT_URL` must match the browser origin (the default is `http://
 ## Demo accounts
 
 Demo accounts are opt-in and intended only for a non-production database. Set
-`DEMO_ACCOUNTS_ENABLED=true` and a `DEMO_ACCOUNT_PASSWORD` of at least 12
-characters in the server environment, then run `pnpm --filter server demo:seed`
-from the repository root. The seed command refuses to run in production and
+`DEMO_ACCOUNTS_ENABLED=true` in the server environment, then run
+`pnpm --filter server demo:seed` from the repository root. The seed command
+uses the shared password `CloudCafeDemo123!`, refuses to run in production, and
 does not change accounts that already exist.
 Complete the normal owner setup before seeding; the demo owner also counts as an
 owner for the one-time setup check.
@@ -30,9 +31,10 @@ In a development client, the login page shows role shortcuts and **Login as
 guest demo**, which signs in directly as the seeded cashier demo account. This
 shortcut is rejected by the server in production.
 
-The shortcuts fill the demo account email; users still need to enter the shared
-password. Accounts use `demo.<role>@cloudcafe.test` for owner, manager, cashier,
-kitchen, and waiter. Keep these accounts and credentials out of production.
+The shortcuts fill the demo account email; users can enter the shared password
+`CloudCafeDemo123!` to sign in. Accounts use `demo.<role>@cloudcafe.test` for
+owner, manager, cashier, kitchen, and waiter. Keep these accounts and public
+demo credentials out of production.
 
 ## Client features
 

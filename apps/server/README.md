@@ -37,7 +37,6 @@ Copy `apps/server/.env.example` to `apps/server/.env` and set the values:
 | `CLOUDINARY_API_SECRET` | Cloudinary API secret. |
 | `TAX_RATE_PERCENT` | Tax percentage used by the app; defaults to `0`. |
 | `DEMO_ACCOUNTS_ENABLED` | Set to `true` to enable local demo login and account seeding. Defaults to `false`. |
-| `DEMO_ACCOUNT_PASSWORD` | Shared password used when creating demo accounts; required only by the demo seeder and must be at least 12 characters. |
 
 Keep `.env` files and all real credentials out of source control. Use distinct,
 random authentication secrets and do not enable demo accounts in production.
@@ -91,15 +90,15 @@ Use migrations for schema changes; do not edit generated Prisma files directly.
 ## Demo accounts
 
 Demo accounts are for local or other non-production environments only. Complete
-owner setup first, then set `DEMO_ACCOUNTS_ENABLED=true` and provide a
-`DEMO_ACCOUNT_PASSWORD` of at least 12 characters in `apps/server/.env`. Run
-from the repository root:
+owner setup first, then set `DEMO_ACCOUNTS_ENABLED=true` in
+`apps/server/.env`. Run from the repository root:
 
 ```sh
 pnpm --filter server demo:seed
 ```
 
-The seeder creates these accounts with the shared password:
+The seeder creates these accounts with the shared password
+`CloudCafeDemo123!`:
 
 | Role | Email |
 | --- | --- |
@@ -111,8 +110,8 @@ The seeder creates these accounts with the shared password:
 
 The seeder refuses to run with `NODE_ENV=production` and does not overwrite
 existing accounts. The guest demo login endpoint uses the seeded cashier and is
-also disabled in production. Never use demo accounts or passwords for real
-customer data.
+also disabled in production. This password is public and for demos only; never
+use demo accounts or passwords for real customer data.
 
 ## Scripts
 

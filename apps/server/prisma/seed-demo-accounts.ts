@@ -1,5 +1,8 @@
 import "dotenv/config";
-import { demoAccounts } from "../../demo-accounts.js";
+import {
+  demoAccountPassword,
+  demoAccounts,
+} from "../../demo-accounts.js";
 import { prisma } from "../src/db/prisma.js";
 import { hashPassword } from "../src/utils/password.js";
 
@@ -12,12 +15,7 @@ async function seedDemoAccounts() {
     throw new Error("Set DEMO_ACCOUNTS_ENABLED=true before seeding demo accounts.");
   }
 
-  const password = process.env.DEMO_ACCOUNT_PASSWORD;
-  if (!password || password.length < 12) {
-    throw new Error("Set DEMO_ACCOUNT_PASSWORD to a value of at least 12 characters.");
-  }
-
-  const passwordHash = await hashPassword(password);
+  const passwordHash = await hashPassword(demoAccountPassword);
   for (const account of demoAccounts) {
     await prisma.user.upsert({
       where: { email: account.email },

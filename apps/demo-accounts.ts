@@ -1,3 +1,5 @@
+export const demoAccountPassword = "CloudCafeDemo123!";
+
 export const demoAccounts = [
   { name: "Demo Owner", email: "demo.owner@cloudcafe.test", role: "OWNER" },
   { name: "Demo Manager", email: "demo.manager@cloudcafe.test", role: "MANAGER" },
