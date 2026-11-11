@@ -50,7 +50,9 @@ pnpm --filter server dev
 
 The API listens at `http://localhost:5000` by default. Check
 `http://localhost:5000/health` for a health response. The client must use the
-same API URL and its origin must match `CLIENT_URL`.
+same API URL and its origin must match `CLIENT_URL`. In production, auth cookies
+use `SameSite=None; Secure` so browsers can send them between separately hosted
+Vercel client and API projects.
 
 The first-time setup flow is exposed by the client. Use the `OWNER_SETUP_SECRET`
 from the server environment to create the initial owner account.
@@ -65,6 +67,8 @@ installs development dependencies needed for the TypeScript build and runs the
 server build command. Configure the environment variables listed above in the
 Vercel project settings. Guest demo login is available in production; its
 database must contain demo data only because guest users have cashier access.
+Set the API's `CLIENT_URL` to the exact deployed client origin so credentialed
+CORS requests and auth cookies work.
 
 The Express application is deployed as a Vercel Function. WebSocket connections
 are not supported by this serverless deployment; use a separate persistent
