@@ -113,18 +113,15 @@ export function LoginPage() {
               {submitting ? "Signing in…" : "Sign in"}
               {!submitting ? <ArrowRight /> : null}
             </Button>
-            {import.meta.env.DEV ||
-            import.meta.env.VITE_DEMO_LOGIN_ENABLED === "true" ? (
-              <Button
-                type="button"
-                variant="outline"
-                className="w-full"
-                disabled={submitting}
-                onClick={handleDemoLogin}
-              >
-                Login as guest demo
-              </Button>
-            ) : null}
+            <Button
+              type="button"
+              variant="outline"
+              className="w-full"
+              disabled={submitting}
+              onClick={handleDemoLogin}
+            >
+              Login as guest demo
+            </Button>
           </form>
           <p className="mt-7 text-center text-sm text-muted-foreground">
             Setting up your café for the first time?{" "}

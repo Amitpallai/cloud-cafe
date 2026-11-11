@@ -11,10 +11,6 @@ async function seedDemoAccounts() {
     throw new Error("Demo accounts cannot be seeded in production.");
   }
 
-  if (process.env.DEMO_ACCOUNTS_ENABLED !== "true") {
-    throw new Error("Set DEMO_ACCOUNTS_ENABLED=true before seeding demo accounts.");
-  }
-
   const passwordHash = await hashPassword(demoAccountPassword);
   for (const account of demoAccounts) {
     await prisma.user.upsert({

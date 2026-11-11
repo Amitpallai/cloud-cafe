@@ -139,10 +139,6 @@ export const authService = {
   },
 
   async loginAsDemo() {
-    if (!env.DEMO_ACCOUNTS_ENABLED) {
-      throw new AppError("Demo login is unavailable", 404);
-    }
-
     const user = await prisma.user.findUnique({
       where: { email: "demo.cashier@cloudcafe.test" },
     });

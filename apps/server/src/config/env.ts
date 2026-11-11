@@ -6,11 +6,6 @@ const envSchema = z.object({
     .enum(["development", "production", "test"])
     .default("development"),
 
-  DEMO_ACCOUNTS_ENABLED: z
-    .enum(["true", "false"])
-    .default("false")
-    .transform((value) => value === "true"),
-
   PORT: z.coerce.number().int().positive().default(5000),
 
   CLIENT_URL: z.string().url(),

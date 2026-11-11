@@ -20,20 +20,16 @@ The server's `CLIENT_URL` must match the browser origin (the default is `http://
 
 ## Demo accounts
 
-Demo accounts are opt-in and intended only for databases containing demo data.
-For local setup, set `DEMO_ACCOUNTS_ENABLED=true` in the server environment and
-run `pnpm --filter server demo:seed` from the repository root. The seed command
-uses the shared password `CloudCafeDemo123!`, refuses to run in production, and
-does not change accounts that already exist. Complete the normal owner setup
-before seeding; the demo owner also counts as an owner for the one-time setup
-check.
-The login page shows **Login as guest demo** in development. To show it on a
-Vercel client deployment, set `VITE_DEMO_LOGIN_ENABLED=true` in that project's
-environment and redeploy. Also set `DEMO_ACCOUNTS_ENABLED=true` in the API
-project and ensure its database has an active cashier account at
+Demo accounts are for databases containing demo data. For local setup, run
+`pnpm --filter server demo:seed` from the repository root. The seed command uses
+the shared password `CloudCafeDemo123!`, refuses to run in production, and does
+not change accounts that already exist. Complete the normal owner setup before
+seeding; the demo owner also counts as an owner for the one-time setup check.
+The login page always shows **Login as guest demo**, including in production.
+The API must have an active cashier account at
 `demo.cashier@cloudcafe.test`. Guest access can view and perform cashier
-operations, so use only a database containing demo data; never enable it on a
-database with real business or customer data.
+operations, so use only a database containing demo data; never use it with a
+database holding real business or customer data.
 
 The shared demo password is `CloudCafeDemo123!`. Accounts use
 `demo.<role>@cloudcafe.test` for owner, manager, cashier, kitchen, and waiter.
