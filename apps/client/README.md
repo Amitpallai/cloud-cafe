@@ -12,26 +12,27 @@ The client is a responsive React 19 + TypeScript single-page application built w
    pnpm dev
    ```
 
-3. Set `VITE_API_URL` in `.env` if the API is not at `http://localhost:5000/api`.
+3. Set `VITE_API_URL` in `.env` if the local API is not at `http://localhost:5000/api`.
   
 4. Open `http://localhost:5173`. On the first run, use **Create owner account** and provide the server's one-time `OWNER_SETUP_SECRET`.
 
-The server's `CLIENT_URL` must match the browser origin (the default is `http://localhost:5173`) to allow credentialed API requests.
+The server's `CLIENT_URL` must match the browser origin (the default is `http://localhost:5173`). On Vercel, API requests are proxied through the client domain so browser auth cookies remain first-party.
 
 ## Demo accounts
 
 Demo accounts are for databases containing demo data. For local setup, run
 `pnpm --filter server demo:seed` from the repository root. The seed command uses
-the shared password `CloudCafeDemo123!`, refuses to run in production, and does
-not change accounts that already exist. Complete the normal owner setup before
-seeding; the demo owner also counts as an owner for the one-time setup check.
+the shared password `CCPOS-Demo-2026-Guest!Q7mN4xP9`, refuses to run in
+production, and updates existing demo accounts' password hashes. Complete the
+normal owner setup before seeding; the demo owner also counts as an owner for
+the one-time setup check.
 The login page always shows **Login as guest demo**, including in production.
 The API must have an active cashier account at
 `demo.cashier@cloudcafe.test`. Guest access can view and perform cashier
 operations, so use only a database containing demo data; never use it with a
 database holding real business or customer data.
 
-The shared demo password is `CloudCafeDemo123!`. Accounts use
+The shared demo password is `CCPOS-Demo-2026-Guest!Q7mN4xP9`. Accounts use
 `demo.<role>@cloudcafe.test` for owner, manager, cashier, kitchen, and waiter.
 Keep these accounts and public demo credentials out of databases with real
 business data.

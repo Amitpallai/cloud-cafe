@@ -1,4 +1,4 @@
-export const demoAccountPassword = "CloudCafeDemo123!";
+export const demoAccountPassword = "CCPOS-Demo-2026-Guest!Q7mN4xP9";
 
 export const demoAccounts = [
   { name: "Demo Owner", email: "demo.owner@cloudcafe.test", role: "OWNER" },

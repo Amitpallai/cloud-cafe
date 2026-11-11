@@ -15,7 +15,7 @@ async function seedDemoAccounts() {
   for (const account of demoAccounts) {
     await prisma.user.upsert({
       where: { email: account.email },
-      update: {},
+      update: { passwordHash },
       create: {
         ...account,
         passwordHash,

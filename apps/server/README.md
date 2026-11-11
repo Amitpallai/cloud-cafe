@@ -68,7 +68,8 @@ server build command. Configure the environment variables listed above in the
 Vercel project settings. Guest demo login is available in production; its
 database must contain demo data only because guest users have cashier access.
 Set the API's `CLIENT_URL` to the exact deployed client origin so credentialed
-CORS requests and auth cookies work.
+CORS requests and auth cookies work. The client Vercel rewrite forwards
+same-origin `/api` requests to this API deployment.
 
 The Express application is deployed as a Vercel Function. WebSocket connections
 are not supported by this serverless deployment; use a separate persistent
@@ -101,7 +102,7 @@ pnpm --filter server demo:seed
 ```
 
 The seeder creates these accounts with the shared password
-`CloudCafeDemo123!`:
+`CCPOS-Demo-2026-Guest!Q7mN4xP9`:
 
 | Role | Email |
 | --- | --- |
@@ -111,9 +112,10 @@ The seeder creates these accounts with the shared password
 | Kitchen | `demo.kitchen@cloudcafe.test` |
 | Waiter | `demo.waiter@cloudcafe.test` |
 
-The seeder refuses to run with `NODE_ENV=production` and does not overwrite
-existing accounts. Guest login requires an active `CASHIER` account with the
-demo cashier email. The fixed demo password is public, and guest users can view
+The seeder refuses to run with `NODE_ENV=production` and updates the password
+hash for existing demo accounts. Guest login requires an active `CASHIER`
+account with the demo cashier email. The fixed demo password is public, and
+guest users can view
 and perform cashier operations. Never use guest login with a database containing
 real business or customer data.
 
