@@ -14,37 +14,30 @@ import {
 
 const router: ExpressRouter = Router();
 
-// All authenticated staff can view tables.
-router.get("/", authenticate, listTables);
-router.get("/:id", authenticate, getTable);
-
-// Owner and manager can manage tables.
-router.post(
-  "/",
-  authenticate,
-  authorize("OWNER", "MANAGER"),
-  createTable,
+const tableAccess = authorize(
+  "OWNER",
+  "MANAGER",
+  "CASHIER",
+  "KITCHEN",
+  "WAITER",
 );
+const tableManagementAccess = authorize("OWNER", "MANAGER");
 
-router.patch(
-  "/:id",
-  authenticate,
-  authorize("OWNER", "MANAGER"),
-  updateTable,
-);
+// All authenticated staff can view tables, while owner and manager manage them.
+router.get("/", authenticate, tableAccess, listTables);
+router.get("/:id", authenticate, tableAccess, getTable);
+
+router.post("/", authenticate, tableManagementAccess, createTable);
+
+router.patch("/:id", authenticate, tableManagementAccess, updateTable);
 
 router.patch(
   "/:id/status",
   authenticate,
-  authorize("OWNER", "MANAGER"),
+  tableManagementAccess,
   changeTableStatus,
 );
 
-router.delete(
-  "/:id",
-  authenticate,
-  authorize("OWNER", "MANAGER"),
-  deleteTable,
-);
+router.delete("/:id", authenticate, tableManagementAccess, deleteTable);
 
 export default router;
