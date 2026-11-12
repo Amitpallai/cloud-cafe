@@ -1,4 +1,5 @@
 import { prisma } from "../db/prisma.js";
+import { AppError } from "../errors/AppError.js";
 import type {
   CreateTableInput,
   UpdateTableInput,
@@ -32,7 +33,7 @@ export async function createTable(data: CreateTableInput) {
   });
 
   if (existing) {
-    throw new Error("A table with this number already exists");
+    throw new AppError("A table with this number already exists", 409);
   }
 
   return prisma.diningTable.create({
@@ -53,7 +54,7 @@ export async function updateTable(
   const existing = await getTableById(id);
 
   if (!existing) {
-    throw new Error("Table not found");
+    throw new AppError("Table not found", 404);
   }
 
   if (
@@ -67,7 +68,7 @@ export async function updateTable(
     });
 
     if (duplicate) {
-      throw new Error("This table number is already in use");
+      throw new AppError("This table number is already in use", 409);
     }
   }
 
@@ -84,12 +85,13 @@ export async function updateTableStatus(
   const existing = await getTableById(id);
 
   if (!existing) {
-    throw new Error("Table not found");
+    throw new AppError("Table not found", 404);
   }
 
   if (existing.status === "OCCUPIED" && status === "AVAILABLE") {
-    throw new Error(
+    throw new AppError(
       "An occupied table cannot be marked available manually",
+      409,
     );
   }
 
@@ -103,11 +105,11 @@ export async function deactivateTable(id: string) {
   const existing = await getTableById(id);
 
   if (!existing) {
-    throw new Error("Table not found");
+    throw new AppError("Table not found", 404);
   }
 
   if (existing.status === "OCCUPIED") {
-    throw new Error("Cannot deactivate an occupied table");
+    throw new AppError("Cannot deactivate an occupied table", 409);
   }
 
   return prisma.diningTable.update({

@@ -112,12 +112,12 @@ The seeder creates these accounts with the shared password
 | Kitchen | `demo.kitchen@cloudcafe.test` |
 | Waiter | `demo.waiter@cloudcafe.test` |
 
-The seeder refuses to run with `NODE_ENV=production` and updates the password
-hash for existing demo accounts. Guest login requires an active `CASHIER`
-account with the demo cashier email. The fixed demo password is public, and
-guest users can view
-and perform cashier operations. Never use guest login with a database containing
-real business or customer data.
+The seeder refuses to run with `NODE_ENV=production` and updates existing demo
+accounts to their seeded name, role, active status, and password. Guest demo
+users can switch to any seeded role from the workspace selector; switching
+signs in to that role's demo account, so backend permissions match the selected
+role. The fixed demo password is public. Never use demo login with a database
+containing real business or customer data.
 
 ## Scripts
 

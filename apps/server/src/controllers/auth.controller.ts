@@ -39,8 +39,8 @@ export const authController = {
     });
   },
 
-  async loginAsDemo(_req: Request, res: Response) {
-    const session = await authService.loginAsDemo();
+  async loginAsDemo(req: Request, res: Response) {
+    const session = await authService.loginAsDemo(req.body.role);
 
     setAuthCookies(
       res,

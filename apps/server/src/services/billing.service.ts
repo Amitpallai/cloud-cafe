@@ -2,6 +2,7 @@
 import { randomBytes } from "node:crypto";
 import { prisma } from "../db/prisma.js";
 import { env } from "../config/env.js";
+import { AppError } from "../errors/AppError.js";
 import type {
   ApplyDiscountInput,
   CreatePaymentInput,
@@ -72,7 +73,7 @@ export async function getBill(orderId: string) {
   });
 
   if (!order) {
-    throw new Error("Order not found");
+    throw new AppError("Order not found", 404);
   }
 
   const paidPaise = order.payments.reduce(
@@ -112,15 +113,16 @@ export async function applyOrderDiscount(
       });
 
       if (!order) {
-        throw new Error("Order not found");
+        throw new AppError("Order not found", 404);
       }
 
       if (
         order.status === "COMPLETED" ||
         order.status === "CANCELLED"
       ) {
-        throw new Error(
+        throw new AppError(
           "This order can no longer be discounted",
+          409,
         );
       }
 
@@ -133,8 +135,9 @@ export async function applyOrderDiscount(
       });
 
       if (existingPayments > 0) {
-        throw new Error(
+        throw new AppError(
           "Discount cannot be changed after a payment has been recorded",
+          409,
         );
       }
 
@@ -144,8 +147,9 @@ export async function applyOrderDiscount(
         data.type === "PERCENTAGE" &&
         data.value > 100
       ) {
-        throw new Error(
+        throw new AppError(
           "Percentage discount cannot exceed 100%",
+          400,
         );
       }
 
@@ -157,8 +161,9 @@ export async function applyOrderDiscount(
           : toPaise(data.value);
 
       if (requestedDiscountPaise > subtotalPaise) {
-        throw new Error(
+        throw new AppError(
           "Discount cannot exceed the subtotal",
+          400,
         );
       }
 
@@ -205,6 +210,7 @@ export async function applyOrderDiscount(
     },
     {
       isolationLevel: "Serializable",
+      timeout: 15_000,
     },
   );
 }
@@ -225,14 +231,14 @@ export async function recordPayment(
       });
 
       if (!order) {
-        throw new Error("Order not found");
+        throw new AppError("Order not found", 404);
       }
 
       if (
         order.status === "COMPLETED" ||
         order.status === "CANCELLED"
       ) {
-        throw new Error("This order is already closed");
+        throw new AppError("This order is already closed", 409);
       }
 
       const existingPayments = await tx.payment.findMany({
@@ -256,8 +262,9 @@ export async function recordPayment(
       const duePaise = totalPaise - alreadyPaidPaise;
 
       if (paymentPaise > duePaise) {
-        throw new Error(
+        throw new AppError(
           "Payment exceeds the outstanding balance",
+          400,
         );
       }
 
@@ -325,6 +332,7 @@ export async function recordPayment(
     },
     {
       isolationLevel: "Serializable",
+      timeout: 15_000,
     },
   );
 }
@@ -357,8 +365,9 @@ export async function getReceipt(orderId: string) {
   });
 
   if (!invoice) {
-    throw new Error(
+    throw new AppError(
       "Invoice not found. Record a payment first.",
+      404,
     );
   }
 

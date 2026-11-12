@@ -5,13 +5,11 @@ import type { User, UserRole } from "@/types/domain";
 
 interface AuthState {
   user: User | null;
-  previewRole: UserRole | null;
   initialized: boolean;
   initializationError: string | null;
-  setPreviewRole: (role: UserRole | null) => void;
   initialize: () => Promise<void>;
   login: (email: string, password: string) => Promise<void>;
-  loginAsDemo: () => Promise<void>;
+  loginAsDemo: (role: UserRole) => Promise<void>;
   setupOwner: (input: {
     name: string;
     email: string;
@@ -24,10 +22,8 @@ interface AuthState {
 
 export const useAuthStore = create<AuthState>((set) => ({
   user: null,
-  previewRole: null,
   initialized: false,
   initializationError: null,
-  setPreviewRole: (previewRole) => set({ previewRole }),
 
   initialize: async () => {
     try {
@@ -54,17 +50,17 @@ export const useAuthStore = create<AuthState>((set) => ({
     });
     set({
       user: response.data.data.user,
-      previewRole: null,
       initialized: true,
       initializationError: null,
     });
   },
 
-  loginAsDemo: async () => {
-    const response = await api.post<{ data: { user: User } }>("/auth/demo-login");
+  loginAsDemo: async (role) => {
+    const response = await api.post<{ data: { user: User } }>("/auth/demo-login", {
+      role,
+    });
     set({
       user: response.data.data.user,
-      previewRole: null,
       initialized: true,
       initializationError: null,
     });
@@ -77,7 +73,6 @@ export const useAuthStore = create<AuthState>((set) => ({
     );
     set({
       user: response.data.data.user,
-      previewRole: null,
       initialized: true,
       initializationError: null,
     });
@@ -87,7 +82,6 @@ export const useAuthStore = create<AuthState>((set) => ({
     await api.post("/auth/logout");
     set({
       user: null,
-      previewRole: null,
       initialized: true,
       initializationError: null,
     });
@@ -96,12 +90,11 @@ export const useAuthStore = create<AuthState>((set) => ({
   clearSession: () =>
     set({
       user: null,
-      previewRole: null,
       initialized: true,
       initializationError: null,
     }),
 }));
 
 export function useCurrentRole() {
-  return useAuthStore((state) => state.previewRole ?? state.user?.role);
+  return useAuthStore((state) => state.user?.role);
 }

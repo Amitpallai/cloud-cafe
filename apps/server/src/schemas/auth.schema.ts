@@ -10,6 +10,10 @@ export const loginSchema = z.object({
   password: z.string().min(1, "Password is required"),
 });
 
+export const demoLoginSchema = z.object({
+  role: z.enum(["OWNER", "MANAGER", "CASHIER", "KITCHEN", "WAITER"]),
+});
+
 export const ownerSetupSchema = z.object({
   setupSecret: z.string().min(32),
   name: z.string().trim().min(2).max(100),

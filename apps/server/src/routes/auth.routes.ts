@@ -12,6 +12,7 @@ import { verifyOrigin } from "../middlewares/verify-origin.js";
 import { asyncHandler } from "../utils/async-handler.js";
 
 import {
+  demoLoginSchema,
   loginSchema,
   ownerSetupSchema,
 } from "../schemas/auth.schema.js";
@@ -40,6 +41,7 @@ router.post(
 router.post(
   "/demo-login",
   loginLimiter,
+  validate(demoLoginSchema),
   asyncHandler(authController.loginAsDemo),
 );
 

@@ -325,12 +325,18 @@ export function BillingPage() {
                 </CardContent>
               </Card>
             ) : null}
-            <Button
-              variant="outline"
-              render={<Link to={`/billing/${orderId}/receipt`} />}
-            >
-              <ReceiptText /> View receipt
-            </Button>
+            {bill.order.invoice ? (
+              <Button
+                variant="outline"
+                render={<Link to={`/billing/${orderId}/receipt`} />}
+              >
+                <ReceiptText /> View receipt
+              </Button>
+            ) : (
+              <p className="text-center text-xs text-muted-foreground">
+                A receipt will be available after the first payment is recorded.
+              </p>
+            )}
           </div>
         </div>
       ) : null}

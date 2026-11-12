@@ -12,7 +12,7 @@ import {
   Users,
   X,
 } from "lucide-react";
-import heroMark from "@/assets/hero.png";
+import heroMark from "@/assets/Brewora.jpg";
 import { Button } from "@/components/ui/button";
 import { ErrorMessage } from "@/components/ui/feedback";
 import { Field, Select } from "@/components/ui/field";
@@ -56,13 +56,13 @@ const navigation: NavItem[] = [
 ];
 
 export function AppLayout() {
-  const { user, logout, previewRole, setPreviewRole } = useAuthStore();
+  const { user, logout, loginAsDemo } = useAuthStore();
   const currentRole = useCurrentRole();
   const location = useLocation();
   const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [loggingOut, setLoggingOut] = useState(false);
-  const [logoutError, setLogoutError] = useState("");
+  const [actionError, setActionError] = useState("");
   const visibleNavigation = navigation.filter((item) =>
     item.roles.includes(currentRole ?? "CASHIER"),
   );
@@ -74,24 +74,29 @@ export function AppLayout() {
     )?.label ?? "Cloud Café";
 
   async function handleLogout() {
-    setLogoutError("");
+    setActionError("");
     setLoggingOut(true);
     try {
       await logout();
       navigate("/login", { replace: true });
     } catch (error) {
-      setLogoutError(messageFromError(error));
+      setActionError(messageFromError(error));
     } finally {
       setLoggingOut(false);
     }
   }
 
-  function handleWorkspaceChange(roleValue: string) {
+  async function handleWorkspaceChange(roleValue: string) {
     const workspace = workspaceShortcuts.find((item) => item.role === roleValue);
     if (!workspace) return;
-    setPreviewRole(workspace.role === user?.role ? null : workspace.role);
-    navigate(workspace.to);
-    setMobileOpen(false);
+    setActionError("");
+    try {
+      await loginAsDemo(workspace.role);
+      navigate(workspace.to);
+      setMobileOpen(false);
+    } catch (error) {
+      setActionError(messageFromError(error));
+    }
   }
 
   return (
@@ -122,11 +127,9 @@ export function AppLayout() {
             onChange={handleWorkspaceChange}
             className="mt-4"
           />
-          {previewRole ? (
-            <p className="mt-2 text-xs text-muted-foreground">
-              Previewing as {formatRole(previewRole)}. Actions still use your signed-in account.
-            </p>
-          ) : null}
+          <p className="mt-2 text-xs text-muted-foreground">
+            Switching roles signs in to that role’s demo account.
+          </p>
           <Button
             variant="ghost"
             className="mt-4 w-full justify-start text-muted-foreground"
@@ -175,11 +178,9 @@ export function AppLayout() {
                   onChange={handleWorkspaceChange}
                   className="mt-2"
                 />
-                {previewRole ? (
-                  <p className="px-3 py-1 text-xs text-muted-foreground">
-                    Previewing as {formatRole(previewRole)}. Actions still use your signed-in account.
-                  </p>
-                ) : null}
+                <p className="px-3 py-1 text-xs text-muted-foreground">
+                  Switching roles signs in to that role’s demo account.
+                </p>
                 <Button
                   variant="ghost"
                   className="justify-start text-muted-foreground"
@@ -193,8 +194,8 @@ export function AppLayout() {
           ) : null}
         </header>
         <main className="mx-auto w-full max-w-[1600px] px-4 py-6 sm:px-7 sm:py-8">
-          {logoutError ? (
-            <ErrorMessage message={logoutError} className="mb-5" />
+          {actionError ? (
+            <ErrorMessage message={actionError} className="mb-5" />
           ) : null}
           <Outlet />
         </main>
@@ -216,7 +217,7 @@ function WorkspaceSelector({
 }) {
   return (
     <div className={className}>
-      <Field label="Preview role (demo)">
+      <Field label="Demo account role">
         <Select
           aria-label="Preview role (demo)"
           value={currentRole ?? ""}

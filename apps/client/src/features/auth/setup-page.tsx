@@ -6,7 +6,7 @@ import { Field, Input } from "@/components/ui/field";
 import { ErrorMessage } from "@/components/ui/feedback";
 import { messageFromError } from "@/lib/format";
 import { useAuthStore } from "@/stores/auth-store";
-import heroMark from "@/assets/hero.png";
+import heroMark from "@/assets/Brewora.jpg";
 
 export function SetupPage() {
   const { user, setupOwner } = useAuthStore();

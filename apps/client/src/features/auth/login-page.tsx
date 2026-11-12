@@ -6,7 +6,7 @@ import { Field, Input } from "@/components/ui/field";
 import { ErrorMessage } from "@/components/ui/feedback";
 import { messageFromError } from "@/lib/format";
 import { useAuthStore } from "@/stores/auth-store";
-import heroMark from "@/assets/hero.png";
+import heroMark from "@/assets/Brewora.jpg";
 
 export function LoginPage() {
   const { user, login, loginAsDemo, initializationError } = useAuthStore();
@@ -39,7 +39,7 @@ export function LoginPage() {
     setError("");
     setSubmitting(true);
     try {
-      await loginAsDemo();
+      await loginAsDemo("CASHIER");
       navigate("/", { replace: true });
     } catch (submitError) {
       setError(messageFromError(submitError));
@@ -118,9 +118,9 @@ export function LoginPage() {
               variant="outline"
               className="w-full"
               disabled={submitting}
-              onClick={handleDemoLogin}
+              onClick={() => void handleDemoLogin()}
             >
-              Login as guest demo
+              Login as cashier demo
             </Button>
           </form>
           <p className="mt-7 text-center text-sm text-muted-foreground">

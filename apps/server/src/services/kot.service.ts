@@ -130,5 +130,7 @@ export async function sendOrderToKitchen(orderId: string) {
     });
 
     return tickets;
+  }, {
+    timeout: 15_000,
   });
 }

@@ -138,12 +138,12 @@ export const authService = {
     return createSession(user);
   },
 
-  async loginAsDemo() {
+  async loginAsDemo(role: UserRole) {
     const user = await prisma.user.findUnique({
-      where: { email: "demo.cashier@cloudcafe.test" },
+      where: { email: `demo.${role.toLowerCase()}@cloudcafe.test` },
     });
 
-    if (!user || !user.isActive || user.role !== "CASHIER") {
+    if (!user || !user.isActive || user.role !== role) {
       throw new AppError("Demo account is unavailable. Seed demo accounts first.", 503);
     }
 

@@ -3,6 +3,7 @@ import { randomBytes } from "node:crypto";
 import { prisma } from "../db/prisma.js";
 import type { CreateOrderInput } from "../schemas/order.schema.js";
 import { env } from "../config/env.js";
+import { AppError } from "../errors/AppError.js";
 
 function generateOrderNumber(): string {
   const date = new Date();
@@ -74,8 +75,9 @@ export async function createOrder(
     });
 
     if (!table) {
-      throw new Error(
+      throw new AppError(
         "Table is unavailable or does not exist",
+        409,
       );
     }
 
@@ -94,8 +96,9 @@ export async function createOrder(
     });
 
     if (claimed.count !== 1) {
-      throw new Error(
+      throw new AppError(
         "This table has just been taken by another order",
+        409,
       );
     }
 
@@ -143,8 +146,9 @@ export async function createOrder(
     });
 
     if (menuItems.length !== menuIds.length) {
-      throw new Error(
+      throw new AppError(
         "One or more menu items are unavailable",
+        409,
       );
     }
 
@@ -236,12 +240,13 @@ export async function cancelOrder(
     });
 
     if (!order) {
-      throw new Error("Order not found");
+      throw new AppError("Order not found", 404);
     }
 
     if (order.status !== "OPEN") {
-      throw new Error(
+      throw new AppError(
         "Only open orders can be cancelled at this stage",
+        409,
       );
     }
 
